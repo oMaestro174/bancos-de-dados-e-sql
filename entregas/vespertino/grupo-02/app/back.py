@@ -14,7 +14,7 @@ try:
         
         cursor = conexao.cursor()
         
-        # Substitua 'sua_tabela' pelo nome real da sua tabela
+        # Substitua 'sua_tabela' pelo nome real da sua tabelaa
         cursor.execute("SELECT * FROM sua_tabela LIMIT 5;")
         
         # Pega as linhas retornadas
