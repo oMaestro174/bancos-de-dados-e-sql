@@ -1,3 +1,5 @@
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
 DROP DATABASE IF EXISTS escola_db;
 CREATE DATABASE escola_db;
 USE escola_db;
