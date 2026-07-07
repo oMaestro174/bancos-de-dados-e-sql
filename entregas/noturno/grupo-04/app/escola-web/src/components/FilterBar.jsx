@@ -1,29 +1,29 @@
 import React from 'react';
 
-function FilterBar({ filterNome, setFilterNome, filterTurma, setFilterTurma, turmasDisponiveis }) {
+function FilterBar({ filterNome, setFilterNome, filterTurma, setFilterTurma, turmasDisponiveis, total }) {
     return (
-        <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center' }}>
-            <div>
-                <label htmlFor="busca-nome" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Pesquisar por Nome:</label>
+        <div className="filter-bar">
+            <div className="filter-field">
+                <label htmlFor="busca-nome" className="filter-label">Pesquisar por nome</label>
                 <input
                     id="busca-nome"
                     type="text"
                     placeholder="Digite o nome do aluno..."
                     value={filterNome}
                     onChange={(e) => setFilterNome(e.target.value)}
-                    style={{ padding: '8px', width: '250px', borderRadius: '4px', border: '1px solid #ccc' }}
+                    className="filter-input"
                 />
             </div>
 
-            <div>
-                <label htmlFor="busca-turma" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Filtrar por Turma:</label>
+            <div className="filter-field">
+                <label htmlFor="busca-turma" className="filter-label">Filtrar por turma</label>
                 <select
                     id="busca-turma"
                     value={filterTurma}
                     onChange={(e) => setFilterTurma(e.target.value)}
-                    style={{ padding: '8px', width: '150px', borderRadius: '4px', border: '1px solid #ccc' }}
+                    className="filter-select"
                 >
-                    <option value="">Todas as Turmas</option>
+                    <option value="">Todas as turmas</option>
                     {turmasDisponiveis.map((turma) => (
                         <option key={turma} value={turma}>
                             {turma}
@@ -31,6 +31,12 @@ function FilterBar({ filterNome, setFilterNome, filterTurma, setFilterTurma, tur
                     ))}
                 </select>
             </div>
+
+            {typeof total === 'number' && (
+                <div className="filter-count">
+                    <strong>{total}</strong> aluno{total === 1 ? '' : 's'} encontrado{total === 1 ? '' : 's'}
+                </div>
+            )}
         </div>
     );
 }

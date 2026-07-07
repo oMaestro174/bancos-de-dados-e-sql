@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from './services/api';
 import FilterBar from './components/FilterBar';
 import AlunoTable from './components/AlunoTable';
+import './App.css';
 
 function App() {
     const [alunos, setAlunos] = useState([]);
@@ -35,24 +36,42 @@ function App() {
     });
 
     if (loading) {
-        return <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>Carregando dados dos alunos...</div>;
+        return (
+            <div className="app-loading">
+                <span className="spinner" />
+                Carregando dados dos alunos...
+            </div>
+        );
     }
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
-            <h1 style={{ color: '#2c3e50', borderBottom: '2px solid #2c3e50', paddingBottom: '10px' }}>
-                Sistema Escolar - Consulta de Alunos
-            </h1>
-            
-            <FilterBar 
-                filterNome={filterNome}
-                setFilterNome={setFilterNome}
-                filterTurma={filterTurma}
-                setFilterTurma={setFilterTurma}
-                turmasDisponiveis={turmasDisponiveis}
-            />
+        <div className="app">
+            <header className="app-header">
+                <div className="app-header-inner">
+                    <div>
+                        <div className="app-eyebrow">Sistema Escolar</div>
+                        <h1 className="app-title">Consulta de Alunos</h1>
+                        <p className="app-subtitle">Pesquise, filtre e acompanhe o desempenho da turma</p>
+                    </div>
+                </div>
+            </header>
 
-            <AlunoTable alunos={alunosFiltrados} />
+            <main className="app-content">
+                <div className="card">
+                    <FilterBar
+                        filterNome={filterNome}
+                        setFilterNome={setFilterNome}
+                        filterTurma={filterTurma}
+                        setFilterTurma={setFilterTurma}
+                        turmasDisponiveis={turmasDisponiveis}
+                        total={alunosFiltrados.length}
+                    />
+                </div>
+
+                <div className="card table-card">
+                    <AlunoTable alunos={alunosFiltrados} />
+                </div>
+            </main>
         </div>
     );
 }
