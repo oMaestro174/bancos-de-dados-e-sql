@@ -43,7 +43,7 @@ def alunos():
     dados = cur.fetchall()
     cur.close()
     con.close()
-
+    
     # serializar Decimal e date
     for d in dados:
         if d["data_matricula"]:
