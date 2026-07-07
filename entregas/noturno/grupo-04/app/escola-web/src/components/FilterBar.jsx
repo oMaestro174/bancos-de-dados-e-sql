@@ -22,14 +22,14 @@ function FilterBar({ filterNome, setFilterNome, filterTurma, setFilterTurma, tur
                     value={filterTurma}
                     onChange={(e) => setFilterTurma(e.target.value)}
                     style={{ padding: '8px', width: '150px', borderRadius: '4px', border: '1px solid #ccc' }}
-                />
+                >
                     <option value="">Todas as Turmas</option>
                     {turmasDisponiveis.map((turma) => (
                         <option key={turma} value={turma}>
                             {turma}
                         </option>
                     ))}
-                <select/>
+                </select>
             </div>
         </div>
     );
