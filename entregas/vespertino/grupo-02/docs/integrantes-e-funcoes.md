@@ -1,1 +1,6 @@
-Preencher com nome dos integrantes do grupo e função de cada um.
+Guilherme Almeida: Desenvolvedor Fullstack
+André Phylyt: Analista de Dados
+Eric Leal: Desenvolvedor FrontEnd
+Rodrigo: 
+Guilherme Cavalcante: 
+Guilherme Almeida:
