@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mysql:
     image: mysql:8.0
@@ -9,34 +11,40 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-      # Alterado para apontar para a pasta 'base' inteira
+      # Procura a pasta 'base' que está 3 níveis acima na árvore de diretórios
       - ../../../base:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
 
   backend:
     build:
       context: ./app/back
     container_name: escola_backend
     restart: always
-    depends_on:
-      - mysql
+    ports:
+      - "5000:5000"
     environment:
-      DB_HOST: mysql
+      DB_HOST: escola_mysql
       DB_USER: root
       DB_PASSWORD: root
       DB_NAME: escola_db
-    ports:
-      - "5000:5000"
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   frontend:
     build:
       context: ./app/front
     container_name: escola_frontend
     restart: always
-    depends_on:
-      - backend
     ports:
       - "5173:5173"
+    depends_on:
+      - backend
 
 volumes:
   mysql_data:
