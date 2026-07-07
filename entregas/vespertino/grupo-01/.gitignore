@@ -1,0 +1,10 @@
+# Arquivo secreto com a senha do banco. NUNCA versionar.
+.env
+
+# A "caixa" do Python. E pesada e pode ser recriada a qualquer momento
+# com: py -m venv venv  +  pip install -r requirements.txt
+venv/
+
+# Arquivos temporarios que o Python gera sozinho.
+__pycache__/
+*.pyc
