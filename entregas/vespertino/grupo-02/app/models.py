@@ -25,7 +25,7 @@ class CompleteStudentResponse(BaseModel):
     
     name: str = Field(alias="nome") # nome
     email: str
-    className: str = Field(alias="nomeDaTurma")
+    classroomName: str = Field(alias="nomeDaTurma")
     enrollmentDate: datetime = Field(alias="dataDaMatricula")
     firstScore: float = Field(alias="primeiraNota")
     secondScore: float = Field(alias="segundaNota")
@@ -99,7 +99,7 @@ class TeacherResponse(BaseModel):
     area: str
 
 # Modelo para turmas
-class ClassCreate(BaseModel):
+class ClassroomCreate(BaseModel):
     """Modelo de dados para criação de turmas"""
     id_curso: int
     id_professor: int
@@ -109,7 +109,7 @@ class ClassCreate(BaseModel):
     capacidade: int
 
 
-class ClassResponse(BaseModel):
+class ClassroomResponse(BaseModel):
     """Modelo de dados para resposta em formato de objeto para turmas"""
     id_turma: int
     id_curso: int
@@ -118,3 +118,8 @@ class ClassResponse(BaseModel):
     turno: str
     periodo: str
     capacidade: int
+
+# Modelo para quantidade de alunos por turma
+class ClassroomStudentsQuantityResponse(BaseModel):
+    classroomName: str
+    studentsQuantity: int

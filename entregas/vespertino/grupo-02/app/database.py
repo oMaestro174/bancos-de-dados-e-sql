@@ -39,13 +39,13 @@ db_connection = mysql.connector.connect(
 )
 
 # Busca individual SELECT - WHERE:
-def buscar_aluno_por_nome():
+def search_student_by_name():
     pass
 
-def buscar_aluno_por_matricula():
+def search_student_by_matricula():
     pass
 
-def buscar_aluno_por_email():
+def search_student_by_email():
     pass
 
 # 
@@ -53,7 +53,8 @@ def list_students_with_class_score_media():
     """Exibir alunos com turma vinculada, notas e média"""
     with db_connection as connection:
         cursor = connection.cursor()
-        cursor.execute("""SELECT a.nome, a.email, nome_turma, data_matricula, nota1, nota2, nota3, media 
+        cursor.execute(
+            """SELECT a.nome, a.email, nome_turma, data_matricula, nota1, nota2, nota3, media 
 FROM alunos a
 INNER JOIN matriculas m ON a.id_aluno = m.id_aluno
 INNER JOIN turmas t ON m.id_turma = t.id_turma
@@ -67,8 +68,8 @@ INNER JOIN notas n ON m.id_matricula = n.id_nota"""
             {
                 "name": row[0],
                 "email": row[1],
-                "nomeDaTurma": row[2],
-                "dataDaMatricula": row[3],
+                "classroomName": row[2],
+                "enrollmentDate": row[3],
                 "firstScore": row[4],
                 "secondScore": row[5],
                 "thirdScore": row[6],
@@ -78,5 +79,30 @@ INNER JOIN notas n ON m.id_matricula = n.id_nota"""
     return students
 
 # Agrupamento JOIN - GROUP BY
-def filtar_alunos_por_turma():
-    pass
+def filter_active_students_by_class():
+    """Filtra a quantidade de alunos por turma"""
+    with db_connection as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT t.nome_turma, COUNT(m.id_aluno) AS total_alunos
+                FROM turmas t
+                INNER JOIN matriculas m 
+                ON t.id_turma = m.id_turma
+                WHERE m.status = "Ativa"
+                GROUP BY t.id_turma;"""
+        )
+
+        rows = cursor.fetchall()
+    
+    # organiza os dados obtidos em um dict
+    quantity_by_classroom = []
+    for row in rows:
+        quantity_by_classroom.append(
+            {
+                "classroomName": row[0],
+                "studentsQuantity": row[1]
+            }
+        )
+
+    # retorna os dados
+    return quantity_by_classroom
