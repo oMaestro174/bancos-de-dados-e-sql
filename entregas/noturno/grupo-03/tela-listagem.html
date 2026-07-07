@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escola DB — Listagem de Alunos</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      min-height: 100vh;
+    }
+
+    /* ── Header ────────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+      color: #fff;
+      padding: 28px 32px 24px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    header p {
+      margin-top: 4px;
+      font-size: 0.875rem;
+      opacity: 0.8;
+    }
+
+    /* ── Main container ─────────────────────────────────────── */
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+
+    /* ── Search bar ─────────────────────────────────────────── */
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+    .search-wrapper svg {
+      flex-shrink: 0;
+      color: #718096;
+    }
+    .search-wrapper input {
+      border: none;
+      outline: none;
+      font-size: 0.975rem;
+      width: 100%;
+      color: #2d3748;
+      background: transparent;
+    }
+    .search-wrapper input::placeholder { color: #a0aec0; }
+
+    /* ── Stats bar ──────────────────────────────────────────── */
+    .stats {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-bottom: 12px;
+    }
+    #count { font-weight: 600; color: #2b6cb0; }
+
+    /* ── Table card ─────────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead tr {
+      background: #ebf4ff;
+      border-bottom: 2px solid #bee3f8;
+    }
+    thead th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+      color: #2b6cb0;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #e2e8f0;
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f7faff; }
+
+    td { padding: 11px 14px; vertical-align: middle; }
+
+    .aluno-name { font-weight: 600; color: #2d3748; }
+    .aluno-email { font-size: 0.8rem; color: #718096; }
+
+    .badge-turma {
+      display: inline-block;
+      background: #ebf8ff;
+      color: #2b6cb0;
+      border: 1px solid #bee3f8;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .notas-cell { white-space: nowrap; }
+    .nota-chip {
+      display: inline-block;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.78rem;
+      margin-right: 3px;
+    }
+
+    .media {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .media.verde  { color: #276749; }
+    .media.amarelo { color: #975a16; }
+    .media.vermelho { color: #9b2c2c; }
+
+    /* ── Empty state ────────────────────────────────────────── */
+    #empty {
+      display: none;
+      padding: 48px;
+      text-align: center;
+      color: #a0aec0;
+      font-size: 0.95rem;
+    }
+
+    /* ── Footer note ────────────────────────────────────────── */
+    .footer-note {
+      margin-top: 20px;
+      font-size: 0.775rem;
+      color: #a0aec0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Escola DB — Listagem de Alunos</h1>
+  <p>Banco de Dados e SQL · Grupo 03 · Noturno · 2026.1</p>
+</header>
+
+<main>
+
+  <!-- Barra de busca -->
+  <div class="search-wrapper">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input
+      type="text"
+      id="search"
+      placeholder="Buscar por nome do aluno ou turma…"
+      oninput="filtrar()"
+      autocomplete="off"
+    />
+  </div>
+
+  <div class="stats">Mostrando <span id="count">0</span> registros</div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Aluno</th>
+          <th>Turma</th>
+          <th>Data de Matrícula</th>
+          <th>Nota 1</th>
+          <th>Nota 2</th>
+          <th>Nota 3</th>
+          <th>Média Final</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="empty">Nenhum aluno encontrado para "<span id="termo"></span>".</div>
+  </div>
+
+  <div class="footer-note">
+    Dados: Supabase · PostgreSQL · Escola DB ·
+    Grupo 03 — Gabriel (UI) | Rafael (Supabase) | Jéssica (Query) | Kelvin (Schema) | Ryan (DER) | Letícia (Docs)
+  </div>
+
+</main>
+
+<script>
+  // ─────────────────────────────────────────────────────────────────────────
+  // DADOS MOCK — Rafael: substitua esta constante pela chamada ao Supabase.
+  //
+  // A query que deve ser usada está em sql/query-principal.sql.
+  // No FlutterFlow: Settings → Integrations → Supabase → Backend Query.
+  // Com fetch direto (vanilla JS / qualquer framework):
+  //
+  //   const SUPABASE_URL = 'https://<project-ref>.supabase.co';
+  //   const SUPABASE_ANON_KEY = '<anon-key>';
+  //
+  //   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/query_alunos?busca=`, {
+  //     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+  //   });
+  //   const dados = await res.json();
+  //   renderTabela(dados);
+  //
+  // ─────────────────────────────────────────────────────────────────────────
+  const DADOS = [
+    { aluno:'Adriana Nogueira',  email:'adriana.nogueira1@email.com',  turma:'BD-01',    data_matricula:'2026-01-02', nota1:6.5, nota2:6.5, nota3:5.8, media:6.27 },
+    { aluno:'Alan Ribeiro',      email:'alan.ribeiro2@email.com',      turma:'BD-01',    data_matricula:'2026-01-03', nota1:5.4, nota2:6.9, nota3:5.8, media:6.03 },
+    { aluno:'Aline Batista',     email:'aline.batista3@email.com',     turma:'BD-01',    data_matricula:'2026-01-04', nota1:7.3, nota2:7.7, nota3:6.3, media:7.1  },
+    { aluno:'Amanda Queiroz',    email:'amanda.queiroz4@email.com',    turma:'BD-01',    data_matricula:'2026-01-05', nota1:6.7, nota2:8.0, nota3:7.4, media:7.37 },
+    { aluno:'Anderson Martins',  email:'anderson.martins5@email.com',  turma:'BD-01',    data_matricula:'2026-01-06', nota1:6.5, nota2:6.4, nota3:6.4, media:6.43 },
+    { aluno:'Andreia Lopes',     email:'andreia.lopes6@email.com',     turma:'BD-01',    data_matricula:'2026-01-07', nota1:8.6, nota2:8.3, nota3:6.8, media:7.9  },
+    { aluno:'Arthur Freitas',    email:'arthur.freitas7@email.com',    turma:'BD-01',    data_matricula:'2026-01-08', nota1:6.3, nota2:6.7, nota3:5.9, media:6.3  },
+    { aluno:'Bianca Moraes',     email:'bianca.moraes8@email.com',     turma:'BD-01',    data_matricula:'2026-01-09', nota1:5.5, nota2:6.0, nota3:5.0, media:5.5  },
+    { aluno:'Brenda Carvalho',   email:'brenda.carvalho9@email.com',   turma:'BD-01',    data_matricula:'2026-01-10', nota1:5.0, nota2:7.3, nota3:6.6, media:6.3  },
+    { aluno:'Caio Henrique Santos', email:'caio.henrique.santos10@email.com', turma:'BD-01', data_matricula:'2026-01-11', nota1:6.6, nota2:7.6, nota3:6.4, media:6.87 },
+    { aluno:'Camila Ferreira',   email:'camila.ferreira11@email.com',  turma:'BD-01',    data_matricula:'2026-01-12', nota1:7.8, nota2:7.7, nota3:6.2, media:7.23 },
+    { aluno:'Carlos Eduardo Lima', email:'carlos.eduardo.lima12@email.com', turma:'BD-01', data_matricula:'2026-01-13', nota1:6.7, nota2:6.8, nota3:6.6, media:6.7 },
+    { aluno:'Cecília Barros',    email:'cecilia.barros13@email.com',   turma:'BD-02',    data_matricula:'2026-01-14', nota1:8.3, nota2:7.5, nota3:7.9, media:7.9  },
+    { aluno:'Cláudia Rezende',   email:'claudia.rezende14@email.com',  turma:'BD-02',    data_matricula:'2026-01-15', nota1:5.1, nota2:7.0, nota3:5.6, media:5.9  },
+    { aluno:'Daniela Azevedo',   email:'daniela.azevedo15@email.com',  turma:'BD-02',    data_matricula:'2026-01-16', nota1:6.2, nota2:6.6, nota3:7.3, media:6.7  },
+    { aluno:'Danilo Castro',     email:'danilo.castro16@email.com',    turma:'BD-02',    data_matricula:'2026-01-17', nota1:6.5, nota2:7.7, nota3:6.7, media:6.97 },
+    { aluno:'Débora Viana',      email:'debora.viana17@email.com',     turma:'BD-02',    data_matricula:'2026-01-18', nota1:7.1, nota2:7.1, nota3:5.9, media:6.7  },
+    { aluno:'Diego Furtado',     email:'diego.furtado18@email.com',    turma:'BD-02',    data_matricula:'2026-01-19', nota1:7.3, nota2:6.6, nota3:6.2, media:6.7  },
+    { aluno:'Eduarda Sales',     email:'eduarda.sales19@email.com',    turma:'BD-02',    data_matricula:'2026-01-20', nota1:8.5, nota2:7.0, nota3:7.7, media:7.73 },
+    { aluno:'Elias Moura',       email:'elias.moura20@email.com',      turma:'BD-02',    data_matricula:'2026-01-21', nota1:8.6, nota2:8.2, nota3:7.7, media:8.17 },
+    { aluno:'Elisa Fernandes',   email:'elisa.fernandes21@email.com',  turma:'BD-02',    data_matricula:'2026-01-22', nota1:6.0, nota2:6.1, nota3:6.7, media:6.27 },
+    { aluno:'Emerson Duarte',    email:'emerson.duarte22@email.com',   turma:'BD-02',    data_matricula:'2026-01-23', nota1:5.4, nota2:6.5, nota3:5.7, media:5.87 },
+    { aluno:'Estela Pires',      email:'estela.pires23@email.com',     turma:'WEBF-01',  data_matricula:'2026-01-24', nota1:6.7, nota2:7.9, nota3:7.2, media:7.27 },
+    { aluno:'Fabiana Gomes',     email:'fabiana.gomes24@email.com',    turma:'WEBF-01',  data_matricula:'2026-01-25', nota1:7.7, nota2:8.2, nota3:8.5, media:8.13 },
+    { aluno:'Felipe Aragão',     email:'felipe.aragao25@email.com',    turma:'WEBF-01',  data_matricula:'2026-01-26', nota1:7.8, nota2:8.2, nota3:7.9, media:7.97 },
+    { aluno:'Fernanda Melo',     email:'fernanda.melo26@email.com',    turma:'WEBF-01',  data_matricula:'2026-01-27', nota1:8.3, nota2:8.7, nota3:8.1, media:8.37 },
+    { aluno:'Gabriel Tavares',   email:'gabriel.tavares27@email.com',  turma:'WEBF-01',  data_matricula:'2026-01-28', nota1:8.7, nota2:8.5, nota3:9.7, media:8.97 },
+    { aluno:'Giovana Matos',     email:'giovana.matos28@email.com',    turma:'WEBF-01',  data_matricula:'2026-01-01', nota1:7.0, nota2:7.4, nota3:7.6, media:7.33 },
+    { aluno:'Gustavo Siqueira',  email:'gustavo.siqueira29@email.com', turma:'WEBF-01',  data_matricula:'2026-01-02', nota1:6.3, nota2:7.0, nota3:7.9, media:7.07 },
+    { aluno:'Helena Diniz',      email:'helena.diniz30@email.com',     turma:'WEBF-01',  data_matricula:'2026-01-03', nota1:8.0, nota2:6.3, nota3:6.3, media:6.87 },
+    { aluno:'Henrique Paiva',    email:'henrique.paiva31@email.com',   turma:'WEBF-01',  data_matricula:'2026-01-04', nota1:7.4, nota2:6.5, nota3:6.9, media:6.93 },
+    { aluno:'Isabela Monteiro',  email:'isabela.monteiro32@email.com', turma:'WEBB-01',  data_matricula:'2026-01-05', nota1:7.4, nota2:8.8, nota3:9.1, media:8.43 },
+    { aluno:'Jéssica Andrade',   email:'jessica.andrade33@email.com',  turma:'WEBB-01',  data_matricula:'2026-01-06', nota1:9.7, nota2:7.9, nota3:9.3, media:8.97 },
+    { aluno:'João Pedro Neves',  email:'joao.pedro.neves34@email.com', turma:'WEBB-01',  data_matricula:'2026-01-07', nota1:9.5, nota2:8.2, nota3:10,  media:9.23 },
+    { aluno:'Jonas Maciel',      email:'jonas.maciel35@email.com',     turma:'WEBB-01',  data_matricula:'2026-01-08', nota1:8.1, nota2:6.3, nota3:8.1, media:7.5  },
+    { aluno:'Júlia Peixoto',     email:'julia.peixoto36@email.com',    turma:'WEBB-01',  data_matricula:'2026-01-09', nota1:7.1, nota2:7.3, nota3:8.5, media:7.63 },
+    { aluno:'Karen Cristina Alves', email:'karen.cristina.alves37@email.com', turma:'WEBB-01', data_matricula:'2026-01-10', nota1:8.5, nota2:6.9, nota3:7.5, media:7.63 },
+    { aluno:'Larissa Nascimento',email:'larissa.nascimento38@email.com',turma:'WEBB-01', data_matricula:'2026-01-11', nota1:8.1, nota2:7.7, nota3:7.3, media:7.7  },
+    { aluno:'Leonardo Cunha',    email:'leonardo.cunha39@email.com',   turma:'WEBB-01',  data_matricula:'2026-01-12', nota1:8.0, nota2:8.9, nota3:7.2, media:8.03 },
+    { aluno:'Letícia Moreira',   email:'leticia.moreira40@email.com',  turma:'REDES-01', data_matricula:'2026-01-13', nota1:6.9, nota2:6.6, nota3:5.6, media:6.37 },
+    { aluno:'Lucas Vinícius Rocha', email:'lucas.vinicius.rocha41@email.com', turma:'REDES-01', data_matricula:'2026-01-14', nota1:6.7, nota2:7.4, nota3:7.1, media:7.07 },
+    { aluno:'Luana Barbosa',     email:'luana.barbosa42@email.com',    turma:'REDES-01', data_matricula:'2026-01-15', nota1:4.0, nota2:6.2, nota3:5.7, media:5.3  },
+    { aluno:'Marcelo Torres',    email:'marcelo.torres43@email.com',   turma:'REDES-01', data_matricula:'2026-01-16', nota1:6.5, nota2:4.4, nota3:4.8, media:5.23 },
+    { aluno:'Mariana Rios',      email:'mariana.rios44@email.com',     turma:'REDES-01', data_matricula:'2026-01-17', nota1:4.6, nota2:6.4, nota3:5.1, media:5.37 },
+    { aluno:'Mateus Cardoso',    email:'mateus.cardoso45@email.com',   turma:'REDES-01', data_matricula:'2026-01-18', nota1:5.2, nota2:5.9, nota3:7.0, media:6.03 },
+    { aluno:'Milena Teodoro',    email:'milena.teodoro46@email.com',   turma:'SEG-01',   data_matricula:'2026-01-19', nota1:7.7, nota2:6.3, nota3:6.1, media:6.7  },
+    { aluno:'Natália Campos',    email:'natalia.campos47@email.com',   turma:'SEG-01',   data_matricula:'2026-01-20', nota1:8.3, nota2:7.4, nota3:7.7, media:7.8  },
+    { aluno:'Nicolas Pacheco',   email:'nicolas.pacheco48@email.com',  turma:'SEG-01',   data_matricula:'2026-01-21', nota1:6.6, nota2:6.5, nota3:8.1, media:7.07 },
+    { aluno:'Patrícia Lemos',    email:'patricia.lemos49@email.com',   turma:'SEG-01',   data_matricula:'2026-01-22', nota1:5.3, nota2:4.5, nota3:6.6, media:5.47 },
+    { aluno:'Paulo Ricardo Silva', email:'paulo.ricardo.silva50@email.com', turma:'SEG-01', data_matricula:'2026-01-23', nota1:6.2, nota2:6.6, nota3:4.9, media:5.9 },
+    { aluno:'Rafaela Correia',   email:'rafaela.correia51@email.com',  turma:'SEG-01',   data_matricula:'2026-01-24', nota1:7.1, nota2:5.2, nota3:7.1, media:6.47 },
+    { aluno:'Ramon Vieira',      email:'ramon.vieira52@email.com',     turma:'LOG-01',   data_matricula:'2026-01-25', nota1:6.9, nota2:6.7, nota3:7.2, media:6.93 },
+    { aluno:'Renata Chaves',     email:'renata.chaves53@email.com',    turma:'LOG-01',   data_matricula:'2026-01-26', nota1:8.4, nota2:6.8, nota3:6.5, media:7.23 },
+    { aluno:'Ricardo Benevides', email:'ricardo.benevides54@email.com',turma:'LOG-01',   data_matricula:'2026-01-27', nota1:7.8, nota2:7.1, nota3:6.8, media:7.23 },
+    { aluno:'Roberta Farias',    email:'roberta.farias55@email.com',   turma:'LOG-01',   data_matricula:'2026-01-28', nota1:7.3, nota2:7.0, nota3:7.4, media:7.23 },
+    { aluno:'Rodrigo Holanda',   email:'rodrigo.holanda56@email.com',  turma:'LOG-01',   data_matricula:'2026-01-01', nota1:5.5, nota2:5.5, nota3:6.6, media:5.87 },
+    { aluno:'Sabrina Mota',      email:'sabrina.mota57@email.com',     turma:'LOG-01',   data_matricula:'2026-01-02', nota1:5.8, nota2:6.4, nota3:5.6, media:5.93 },
+    { aluno:'Samuel Pinheiro',   email:'samuel.pinheiro58@email.com',  turma:'LOG-01',   data_matricula:'2026-01-03', nota1:6.3, nota2:5.5, nota3:6.1, media:5.97 },
+    { aluno:'Sara Beatriz Costa',email:'sara.beatriz.costa59@email.com',turma:'WEBB-02', data_matricula:'2026-01-04', nota1:6.4, nota2:8.1, nota3:7.7, media:7.4  },
+    { aluno:'Talita Xavier',     email:'talita.xavier60@email.com',    turma:'WEBB-02',  data_matricula:'2026-01-05', nota1:7.2, nota2:7.8, nota3:8.9, media:7.97 },
+    { aluno:'Thiago Amaral',     email:'thiago.amaral61@email.com',    turma:'WEBB-02',  data_matricula:'2026-01-06', nota1:7.3, nota2:9.0, nota3:8.1, media:8.13 },
+    { aluno:'Vanessa Guimarães', email:'vanessa.guimaraes62@email.com',turma:'WEBB-02',  data_matricula:'2026-01-07', nota1:8.6, nota2:9.4, nota3:8.3, media:8.77 },
+    { aluno:'Vinícius Porto',    email:'vinicius.porto63@email.com',   turma:'WEBF-02',  data_matricula:'2026-01-08', nota1:7.0, nota2:7.5, nota3:8.2, media:7.57 },
+    { aluno:'Vitória Cristina Dias', email:'vitoria.cristina.dias64@email.com', turma:'WEBF-02', data_matricula:'2026-01-09', nota1:7.0, nota2:8.1, nota3:7.8, media:7.63 },
+    { aluno:'Wellington Nunes',  email:'wellington.nunes65@email.com', turma:'WEBF-02',  data_matricula:'2026-01-10', nota1:8.0, nota2:7.5, nota3:7.3, media:7.6  },
+    { aluno:'Yasmin Soares',     email:'yasmin.soares66@email.com',    turma:'WEBF-02',  data_matricula:'2026-01-11', nota1:7.0, nota2:7.2, nota3:7.0, media:7.07 },
+    { aluno:'Yuri Delgado',      email:'yuri.delgado67@email.com',     turma:'BD-03',    data_matricula:'2026-01-12', nota1:7.0, nota2:5.8, nota3:5.6, media:6.13 },
+    { aluno:'Zuleica Almeida',   email:'zuleica.almeida68@email.com',  turma:'BD-03',    data_matricula:'2026-01-13', nota1:5.8, nota2:7.6, nota3:7.6, media:7.0  },
+    { aluno:'Otávio Menezes',    email:'otavio.menezes69@email.com',   turma:'BD-03',    data_matricula:'2026-01-14', nota1:7.5, nota2:6.6, nota3:6.5, media:6.87 },
+    { aluno:'Priscila Duarte',   email:'priscila.duarte70@email.com',  turma:'BD-03',    data_matricula:'2026-01-15', nota1:4.5, nota2:4.9, nota3:4.2, media:4.53 },
+  ];
+
+  // ── Helpers ────────────────────────────────────────────────
+  function corMedia(m) {
+    if (m >= 7) return 'verde';
+    if (m >= 5) return 'amarelo';
+    return 'vermelho';
+  }
+
+  function fmtData(d) {
+    const [y, mo, dia] = d.split('-');
+    return `${dia}/${mo}/${y}`;
+  }
+
+  // ── Renderização ───────────────────────────────────────────
+  function renderTabela(lista) {
+    const tbody = document.getElementById('tbody');
+    const empty = document.getElementById('empty');
+    const count = document.getElementById('count');
+
+    tbody.innerHTML = '';
+    count.textContent = lista.length;
+
+    if (!lista.length) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    lista.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div class="aluno-name">${r.aluno}</div>
+          <div class="aluno-email">${r.email}</div>
+        </td>
+        <td><span class="badge-turma">${r.turma}</span></td>
+        <td>${fmtData(r.data_matricula)}</td>
+        <td><span class="nota-chip">${r.nota1.toFixed(1)}</span></td>
+        <td><span class="nota-chip">${r.nota2.toFixed(1)}</span></td>
+        <td><span class="nota-chip">${r.nota3.toFixed(1)}</span></td>
+        <td><span class="media ${corMedia(r.media)}">${r.media.toFixed(2)}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Filtro (nome do aluno OU turma) ───────────────────────
+  function filtrar() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    document.getElementById('termo').textContent = q;
+    const filtrado = q
+      ? DADOS.filter(r =>
+          r.aluno.toLowerCase().includes(q) ||
+          r.turma.toLowerCase().includes(q)
+        )
+      : DADOS;
+    renderTabela(filtrado);
+  }
+
+  // ── Init ───────────────────────────────────────────────────
+  renderTabela(DADOS);
+</script>
+
+</body>
+</html>

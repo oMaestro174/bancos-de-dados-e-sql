@@ -1,0 +1,257 @@
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Inter",sans-serif;
+    background:#f8fafc;
+    color:#334155;
+    min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:#1e3a5f;
+    color:#fff;
+    padding:28px 36px;
+    border-bottom:4px solid #d4af37;
+}
+
+header h1{
+    font-size:2rem;
+    font-weight:700;
+    letter-spacing:-0.5px;
+}
+
+header p{
+    margin-top:8px;
+    font-size:.95rem;
+    color:rgba(255,255,255,.75);
+}
+
+/* ================= MAIN ================= */
+
+main{
+    max-width:1250px;
+    margin:40px auto;
+    padding:0 24px;
+}
+
+/* ================= PESQUISA ================= */
+
+.search-wrapper{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    background:#fff;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+
+    padding:12px 18px;
+
+    margin-bottom:18px;
+}
+
+.search-wrapper svg{
+    color:#64748b;
+}
+
+.search-wrapper input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+
+    font-size:15px;
+    color:#334155;
+
+    font-family:inherit;
+}
+
+.search-wrapper input::placeholder{
+    color:#94a3b8;
+}
+
+/* ================= CONTADOR ================= */
+
+.stats{
+    margin-bottom:14px;
+    font-size:.9rem;
+    color:#64748b;
+}
+
+#count{
+    font-weight:700;
+    color:#1e3a5f;
+}
+
+/* ================= CARD ================= */
+
+.card{
+    background:#fff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+/* ================= TABELA ================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#f8fafc;
+}
+
+thead th{
+    padding:15px;
+
+    text-align:left;
+
+    font-size:.9rem;
+    font-weight:600;
+
+    color:#1e3a5f;
+
+    border-bottom:2px solid #dbe2ea;
+}
+
+tbody td{
+    padding:14px 15px;
+
+    border-bottom:1px solid #edf2f7;
+
+    font-size:.9rem;
+}
+
+tbody tr{
+    transition:.2s;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
+
+/* ================= ALUNO ================= */
+
+.aluno-name{
+    font-weight:600;
+    color:#1e293b;
+}
+
+.aluno-email{
+    margin-top:4px;
+    font-size:.8rem;
+    color:#64748b;
+}
+
+/* ================= BADGE ================= */
+
+.badge-turma{
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    background:#eef4ff;
+
+    color:#1e3a5f;
+
+    font-size:.78rem;
+    font-weight:600;
+}
+
+/* ================= NOTAS ================= */
+
+.notas-cell{
+    white-space:nowrap;
+}
+
+.nota-chip{
+    display:inline-block;
+
+    padding:4px 8px;
+
+    margin-right:4px;
+
+    background:#f1f5f9;
+
+    border-radius:6px;
+
+    font-size:.78rem;
+}
+
+/* ================= MÉDIA ================= */
+
+.media{
+    font-weight:700;
+}
+
+.media.verde{
+    color:#15803d;
+}
+
+.media.amarelo{
+    color:#ca8a04;
+}
+
+.media.vermelho{
+    color:#dc2626;
+}
+
+/* ================= ESTADO VAZIO ================= */
+
+#empty{
+    display:none;
+
+    text-align:center;
+
+    padding:50px;
+
+    color:#94a3b8;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    margin-top:35px;
+
+    padding:20px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    font-size:.85rem;
+}
+
+/* ================= RESPONSIVO ================= */
+
+@media(max-width:900px){
+
+    main{
+        padding:0 15px;
+    }
+
+    table{
+        font-size:.8rem;
+    }
+
+    thead th,
+    tbody td{
+        padding:12px 10px;
+    }
+
+}
