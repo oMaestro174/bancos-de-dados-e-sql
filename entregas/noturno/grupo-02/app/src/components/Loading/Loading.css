@@ -1,0 +1,41 @@
+/* Spinner */
+.spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-8);
+  color: var(--text-muted);
+}
+.spinner {
+  width: 38px; height: 38px;
+  border: 3px solid var(--border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+.spinner-text { font-size: var(--fs-sm); }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Skeleton */
+.skeleton-table { padding: var(--sp-2); }
+.skeleton-row {
+  display: flex;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.skeleton-cell {
+  height: 16px;
+  flex: 1;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--bg-hover) 25%,
+    var(--border) 37%,
+    var(--bg-hover) 63%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+.skeleton-cell:first-child { flex: 2; }
