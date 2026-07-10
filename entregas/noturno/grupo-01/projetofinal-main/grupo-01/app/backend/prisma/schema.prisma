@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Professor {
+  id_professor Int     @id @default(autoincrement())
+  nome         String
+  email        String  @unique
+  area         String
+  turmas       Turma[]
+
+  @@map("professores")
+}
+
+model Curso {
+  id_curso      Int     @id @default(autoincrement())
+  nome          String
+  carga_horaria Int
+  area          String
+  turmas        Turma[]
+
+  @@map("cursos")
+}
+
+model Turma {
+  id_turma      Int         @id @default(autoincrement())
+  id_curso      Int
+  id_professor  Int
+  nome_turma    String
+  turno         String
+  periodo       String
+  capacidade    Int
+  curso         Curso       @relation(fields: [id_curso], references: [id_curso])
+  professor     Professor   @relation(fields: [id_professor], references: [id_professor])
+  matriculas    Matricula[]
+
+  @@map("turmas")
+}
+
+model Aluno {
+  id_aluno        Int         @id @default(autoincrement())
+  nome            String
+  email           String      @unique
+  data_nascimento DateTime?
+  cidade          String
+  matriculas      Matricula[]
+
+  @@map("alunos")
+}
+
+model Matricula {
+  id_matricula Int      @id @default(autoincrement())
+  id_aluno     Int
+  id_turma     Int
+  data_matricula DateTime
+  status       String
+  aluno        Aluno    @relation(fields: [id_aluno], references: [id_aluno])
+  turma        Turma    @relation(fields: [id_turma], references: [id_turma])
+  notas        Nota[]
+
+  @@map("matriculas")
+}
+
+model Nota {
+  id_nota      Int       @id @default(autoincrement())
+  id_matricula Int
+  nota1        Decimal   @db.Decimal(4, 2)
+  nota2        Decimal   @db.Decimal(4, 2)
+  nota3        Decimal   @db.Decimal(4, 2)
+  media        Decimal   @db.Decimal(4, 2)
+  matricula    Matricula @relation(fields: [id_matricula], references: [id_matricula])
+
+  @@map("notas")
+}
