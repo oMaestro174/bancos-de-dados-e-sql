@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Acadêmica - Escola DB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>📚 Boletim Acadêmico - Escola DB</h1>
+            <p>Módulo de Consulta de Alunos e Médias Finais</p>
+        </header>
+
+        <!-- Seção de Filtros (Requisito Obrigatório) -->
+        <section class="filters">
+            <div class="filter-group">
+                <label for="searchName">Pesquisar por Nome:</label>
+                <input type="text" id="searchName" placeholder="Digite o nome do aluno..." onkeyup="filtrarAlunos()">
+            </div>
+
+            <div class="filter-group">
+                <label for="filterTurma">Filtrar por Turma:</label>
+                <select id="filterTurma" onchange="filtrarAlunos()">
+                    <option value="">Todas as Turmas</option>
+                    <option value="Full Stack - Turma A">Full Stack - Turma A</option>
+                    <option value="Full Stack - Turma B">Full Stack - Turma B</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Tabela de Exibição dos Dados -->
+        <div class="table-responsive">
+            <table id="tabelaAlunos">
+                <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nome do Aluno</th>
+                        <th>E-mail</th>
+                        <th>Turma</th>
+                        <th>Data de Matrícula</th>
+                        <th>Nota 1</th>
+                        <th>Nota 2</th>
+                        <th>Média Final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Os dados cadastrados no banco aparecem aqui -->
+                    <tr>
+                        <td>2026001</td>
+                        <td>Ana Silva</td>
+                        <td>ana.silva@email.com</td>
+                        <td>Full Stack - Turma A</td>
+                        <td>10/02/2026</td>
+                        <td>8.50</td>
+                        <td>9.00</td>
+                        <td><strong>8.75</strong></td>
+                    </tr>
+                    <tr>
+                        <td>2026002</td>
+                        <td>Carlos Eduardo</td>
+                        <td>carlos.eduardo@email.com</td>
+                        <td>Full Stack - Turma A</td>
+                        <td>11/02/2026</td>
+                        <td>6.00</td>
+                        <td>5.50</td>
+                        <td><strong>5.75</strong></td>
+                    </tr>
+                    <tr>
+                        <td>2026003</td>
+                        <td>Mariana Costa</td>
+                        <td>mariana.costa@email.com</td>
+                        <td>Full Stack - Turma B</td>
+                        <td>15/02/2026</td>
+                        <td>9.50</td>
+                        <td>10.00</td>
+                        <td><strong>9.75</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Script de Filtro em Tempo Real -->
+    <script>
+        function filtrarAlunos() {
+            const inputNome = document.getElementById("searchName").value.toLowerCase();
+            const selectTurma = document.getElementById("filterTurma").value;
+            const tabela = document.getElementById("tabelaAlunos");
+            const linhas = tabela.getElementsByTagName("tr");
+
+            for (let i = 1; i < linhas.length; i++) {
+                let colunaNome = linhas[i].getElementsByTagName("td")[1];
+                let colunaTurma = linhas[i].getElementsByTagName("td")[3];
+
+                if (colunaNome && colunaTurma) {
+                    let nomeTexto = colunaNome.textContent || colunaNome.innerText;
+                    let turmaTexto = colunaTurma.textContent || colunaTurma.innerText;
+
+                    let atendeNome = nomeTexto.toLowerCase().includes(inputNome);
+                    let atendeTurma = (selectTurma === "" || turmaTexto === selectTurma);
+
+                    if (atendeNome && atendeTurma) {
+                        linhas[i].style.display = "";
+                    } else {
+                        linhas[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
