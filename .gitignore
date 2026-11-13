@@ -25,3 +25,9 @@ Thumbs.db
 *.swp
 *.swo
 *~
+# Arquivos de configuração e senhas
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
