@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Alunos - ITEAM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Consulta de Alunos Matriculados</h1>
+    <p>ITEAM - Sistema de Consulta Escolar</p>
+</header>
+
+<main>
+    <section class="filtros">
+        <h2>Pesquisar alunos</h2>
+
+        <form method="GET">
+            <div>
+                <label for="nome">Nome do aluno:</label>
+                <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Digite o nome"
+                        value="{{ nome }}"
+                >
+            </div>
+
+            <div>
+                <label for="turma">Turma:</label>
+                <select id="turma" name="turma">
+                    <option value="0">Todas as turmas</option>
+
+                    {% for turma in turmas %}
+                    <option
+                            value="{{ turma.id_turma }}"
+                            {% if turma_id == turma.id_turma %}selected{% endif %}
+                    >
+                        {{ turma.nome_turma }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Pesquisar</button>
+            <a href="/">Limpar filtros</a>
+        </form>
+    </section>
+
+    <section class="resultados">
+        <h2>Alunos encontrados: {{ alunos|length }}</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Turma</th>
+                    <th>Data Matrícula</th>
+                    <th>AV1</th>
+                    <th>AV2</th>
+                    <th>AV3</th>
+                    <th>Média final</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.nome }}</td>
+                    <td>{{ aluno.email }}</td>
+                    <td>{{ aluno.nome_turma }}</td>
+                    <td>{{ aluno.data_matricula.strftime('%d/%m/%Y') if aluno.data_matricula else '-' }}</td>
+                    <td>{{ aluno.nota1 if aluno.nota1 is not none else '-' }}</td>
+                    <td>{{ aluno.nota2 if aluno.nota2 is not none else '-' }}</td>
+                    <td>{{ aluno.nota3 if aluno.nota3 is not none else '-' }}</td>
+                    <td class="{% if aluno.media is not none and aluno.media < 7 %}media-baixa{% elif aluno.media is not none %}media-alta{% endif %}">
+                        {{ aluno.media if aluno.media is not none else '-' }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8">Nenhum aluno encontrado.</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>Projeto Integrador - Bancos de Dados e SQL | ITEAM</p>
+</footer>
+
+</body>
+</html>
