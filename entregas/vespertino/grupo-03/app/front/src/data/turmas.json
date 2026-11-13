@@ -1,0 +1,52 @@
+[
+  {
+    "id_turma": 1,
+    "nome_turma": "BD-01",
+    "turno": "Manhã"
+  },
+  {
+    "id_turma": 2,
+    "nome_turma": "BD-02",
+    "turno": "Noite"
+  },
+  {
+    "id_turma": 10,
+    "nome_turma": "BD-03",
+    "turno": "Tarde"
+  },
+  {
+    "id_turma": 7,
+    "nome_turma": "LOG-01",
+    "turno": "Manhã"
+  },
+  {
+    "id_turma": 5,
+    "nome_turma": "REDES-01",
+    "turno": "Manhã"
+  },
+  {
+    "id_turma": 6,
+    "nome_turma": "SEG-01",
+    "turno": "Tarde"
+  },
+  {
+    "id_turma": 4,
+    "nome_turma": "WEBB-01",
+    "turno": "Noite"
+  },
+  {
+    "id_turma": 8,
+    "nome_turma": "WEBB-02",
+    "turno": "Tarde"
+  },
+  {
+    "id_turma": 3,
+    "nome_turma": "WEBF-01",
+    "turno": "Tarde"
+  },
+  {
+    "id_turma": 9,
+    "nome_turma": "WEBF-02",
+    "turno": "Noite"
+  }
+]
