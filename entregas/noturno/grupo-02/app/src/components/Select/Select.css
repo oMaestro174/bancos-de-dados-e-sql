@@ -1,0 +1,42 @@
+.select { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.select__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+}
+
+.select__field {
+  position: relative;
+  display: flex;
+}
+/* seta customizada */
+.select__field::after {
+  content: '';
+  position: absolute;
+  right: var(--sp-4);
+  top: 50%;
+  width: 8px; height: 8px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.select__control {
+  appearance: none;
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text-strong);
+  font-size: var(--fs-base);
+  padding: var(--sp-3) var(--sp-6) var(--sp-3) var(--sp-3);
+  cursor: pointer;
+  transition: border var(--transition), box-shadow var(--transition);
+}
+.select__control:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}

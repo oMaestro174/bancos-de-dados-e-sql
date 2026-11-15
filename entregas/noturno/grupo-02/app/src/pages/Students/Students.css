@@ -1,0 +1,32 @@
+.students__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.students__filtros {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-4);
+}
+
+.students__resumo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-3);
+  padding-left: var(--sp-1);
+}
+
+.students__tabela-card { padding: var(--sp-2); overflow: hidden; }
+
+@media (max-width: 760px) {
+  .students__filtros { grid-template-columns: 1fr; }
+  .students__tabela-card { background: transparent; border: none; box-shadow: none; padding: 0; }
+}

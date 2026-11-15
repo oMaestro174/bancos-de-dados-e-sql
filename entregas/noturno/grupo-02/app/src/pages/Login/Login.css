@@ -1,0 +1,113 @@
+.login {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+.login__toggle { position: absolute; top: var(--sp-4); right: var(--sp-4); z-index: 2; }
+
+/* Painel de marca (lado esquerdo) */
+.login__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-8);
+  background: linear-gradient(135deg, var(--color-primary), #7c3aed 70%, var(--color-secondary));
+  color: #fff;
+  overflow: hidden;
+}
+.login__brand-content { max-width: 380px; }
+.login__brand-logo { font-size: 3.5rem; display: block; margin-bottom: var(--sp-4); }
+.login__brand-content h1 { color: #fff; font-size: 2.25rem; margin-bottom: var(--sp-3); }
+.login__brand-content p { color: rgba(255, 255, 255, 0.88); font-size: var(--fs-lg); line-height: 1.6; }
+
+/* Formulário (lado direito) */
+.login__form-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6);
+  background: var(--bg-body);
+}
+.login__form {
+  width: 100%;
+  max-width: 380px;
+  animation: fadeIn 300ms ease;
+}
+.login__titulo { font-size: var(--fs-2xl); }
+.login__subtitulo { color: var(--text-muted); margin: var(--sp-2) 0 var(--sp-5); }
+
+.login__erro {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--color-error-soft);
+  color: var(--color-error);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-4);
+}
+
+.login__campo { margin-bottom: var(--sp-4); }
+.login__campo label {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text);
+  margin-bottom: var(--sp-2);
+}
+.login__input {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 0 var(--sp-3);
+  transition: border var(--transition), box-shadow var(--transition);
+}
+.login__input:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+.login__input svg { color: var(--text-muted); flex-shrink: 0; }
+.login__input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-strong);
+  font-size: var(--fs-base);
+  padding: var(--sp-3) 0;
+  min-width: 0;
+}
+.login__olho {
+  display: flex;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  padding: var(--sp-1);
+}
+.login__olho:hover { color: var(--text-strong); }
+
+.login__submit { width: 100%; margin-top: var(--sp-2); }
+
+.login__dica {
+  margin-top: var(--sp-5);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-surface-2);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.7;
+}
+.login__dica strong { color: var(--text); }
+
+/* Responsivo: esconde o painel de marca no mobile */
+@media (max-width: 820px) {
+  .login { grid-template-columns: 1fr; }
+  .login__brand { display: none; }
+}

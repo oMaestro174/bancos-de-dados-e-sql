@@ -1,0 +1,55 @@
+.paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding: var(--sp-4) var(--sp-2) var(--sp-2);
+}
+
+.paginacao__info {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.paginacao__controles {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.paginacao__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text);
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition: background var(--transition), color var(--transition), border var(--transition);
+}
+.paginacao__btn:hover:not(:disabled):not(.paginacao__btn--ativo) {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+.paginacao__btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.paginacao__btn--ativo {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--text-onprimary);
+}
+
+.paginacao__reticencias {
+  padding: 0 var(--sp-1);
+  color: var(--text-muted);
+}
+
+@media (max-width: 480px) {
+  .paginacao { justify-content: center; }
+}
