@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletim Escolar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Boletim Escolar</h1>
+        <p>Consulta de alunos matriculados</p>
+    </header>
+
+    <main>
+        <section class="filtros">
+            <div class="campo">
+                <label for="pesquisa">Pesquisar aluno</label>
+                <input
+                    type="text"
+                    id="pesquisa"
+                    placeholder="Digite o nome do aluno..."
+                >
+            </div>
+
+            <div class="campo">
+                <label for="filtroTurma">Filtrar por turma</label>
+                <select id="filtroTurma">
+                    <option value="">Todas as turmas</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="resultado">
+            <h2>Alunos matriculados</h2>
+
+            <p id="mensagem"></p>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>E-mail</th>
+                            <th>Turma</th>
+                            <th>Data da matrícula</th>
+                            <th>Nota 1</th>
+                            <th>Nota 2</th>
+                            <th>Nota 3</th>
+                            <th>Média final</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="listaAlunos">
+                        <tr>
+                            <td colspan="8">Carregando alunos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
